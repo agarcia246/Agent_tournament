@@ -99,7 +99,7 @@ def consistent_placements(length:int, board_size:int, blocked:list[list[int]], r
     return placements
 
 
-def sonar_posterior(prior, reading, region_cells, correct_probability):
+def sonar_posterior(prior:dict, reading:int, region_cells:int, correct_probability:float):
     """Bayes' rule: P(true count | sonar reading).
 
     prior  {"0": 0.5, "1": 0.3, ...}, a probability for each true count (keys are strings,
@@ -115,14 +115,32 @@ def sonar_posterior(prior, reading, region_cells, correct_probability):
     """
 
 
-    
+    error = (1 - correct_probability) / 2
+    scores = {}
+
+    for key, p in prior.items():
+        n = int(key)
+
+        options = {
+            n: correct_probability, 
+            n-1: error, 
+            n+1: error
+        }
+
+        options = {r: q for r, q in options.items() if 0 <= r <= region_cells}
+        likelihood = options.get(reading, 0) / sum(options.values)
+        scores[key] = p*likelihood
+    total = sum(scores.values())
+    return {key:s / total for key, s in scores.items()}
 
 
 
 
 
 
-    raise NotImplementedError
+
+
+
 
 
 def predict_ship_belief(belief, length, orientation, move_probability):
