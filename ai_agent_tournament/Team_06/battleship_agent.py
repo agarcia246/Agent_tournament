@@ -11,9 +11,10 @@ North is row - 1 and east is col + 1.
 Keep the function names and signatures below. Add any helpers you need.
 """
 import random
+import numpy as np
 
 
-def act(observation):
+def act(observation:dict):
     """Called once for placement, then once per turn. Module-level variables survive.
 
     Placement phase, observation["phase"] == "placement":
@@ -47,7 +48,7 @@ def act(observation):
 # ---------------------------------------------------------------------------------
 
 
-def consistent_placements(length, board_size, blocked, required):
+def consistent_placements(length:int, board_size:int, blocked:list[list[int]], required:list[list[int]]):
     """Every position of one ship consistent with the evidence.
 
     blocked   cells the ship cannot occupy, as [[row, col], ...]
@@ -56,7 +57,46 @@ def consistent_placements(length, board_size, blocked, required):
     Returns [[row, col, "H" or "V"], ...], where [row, col] is the ship's top-left cell,
     in any order and without duplicates. Length is always at least 2.
     """
-    raise NotImplementedError
+
+    blocked_set = {tuple(cell) for cell in blocked}
+    required_set = {tuple(cell) for cell in required}
+
+    # step 1. create placements
+    placements = []
+
+
+
+
+    for row in range(board_size):
+        for column in range(board_size - length + 1):
+            cells = {
+                (row, column + offset) for offset in range(length)
+            }
+            if cells & blocked_set:
+                continue
+
+            if not required_set.issubset(cells):
+                continue
+
+            placements.append([row,column,"H"])
+
+
+    for row in range(board_size - length + 1):
+        for column in range(board_size):
+            cells = {
+                (row + offset, column) for offset in range(length)
+            }
+            if cells & blocked_set:
+                continue
+
+            if not required_set.issubset(cells):
+                continue
+
+            placements.append([row,column,"V"])
+
+
+
+    return placements
 
 
 def sonar_posterior(prior, reading, region_cells, correct_probability):
@@ -73,6 +113,15 @@ def sonar_posterior(prior, reading, region_cells, correct_probability):
 
     Returns {"0": p0, "1": p1, ...}, the posterior over the same keys.
     """
+
+
+    
+
+
+
+
+
+
     raise NotImplementedError
 
 
@@ -88,3 +137,5 @@ def predict_ship_belief(belief, length, orientation, move_probability):
     Returns the new belief, with the same shape.
     """
     raise NotImplementedError
+
+
