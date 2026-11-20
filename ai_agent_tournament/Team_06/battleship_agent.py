@@ -136,14 +136,7 @@ def sonar_posterior(prior:dict, reading:int, region_cells:int, correct_probabili
 
 
 
-
-
-
-
-
-
-
-def predict_ship_belief(belief, length, orientation, move_probability):
+def predict_ship_belief(belief:list[list[int, int]], length:int, orientation:str, move_probability:float) -> list[list[int, int]]:
     """One prediction step of a belief filter for one unseen ship.
 
     belief[row][col] = P(the ship's top-left cell is [row, col]), on a square board.
@@ -154,6 +147,19 @@ def predict_ship_belief(belief, length, orientation, move_probability):
 
     Returns the new belief, with the same shape.
     """
-    raise NotImplementedError
+
+    size = len(belief)
+
+
+    def fits(row, col, length):
+
+    
+
+
+
+
+
+
+
 
 
